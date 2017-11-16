@@ -47,8 +47,10 @@ public class MessageMapper {
         switch(messageType){
             
             case "text":
-                 
-                message.setMessageBody(map.get("text").toString());
+                if(msg instanceof TextMessage){
+                  TextMessage textMessage = (TextMessage)msg;
+                  message.setMessageBody(textMessage.getText());
+                }
                 break;
             
 //            case "rich_media":
@@ -57,66 +59,86 @@ public class MessageMapper {
             
             case "video":
                 
-                message.setIsFile(true)
+                if(msg instanceof VideoMessage){
+                  VideoMessage videoMessage = (VideoMessage)msg;
+                  message.setIsFile(true)
                         .setIsBot(true)
                         .setMessageType(MessageType.video)
-                        .setFileUrl(map.get("media").toString())
-                        .setMessageBody(map.get("text").toString());
+                        .setFileUrl(videoMessage.getUrl())
+                        .setMessageBody(videoMessage.getText());
+                }
+                
                 break;
                 
             case "picture":
-                
-                message.setIsFile(true)
+                if(msg instanceof PictureMessage){
+                  PictureMessage pictureMessage = (PictureMessage)msg;
+                  message.setIsFile(true)
                         .setIsBot(true)
-                        .setMessageType(MessageType.document)
-                        .setFileUrl(map.get("media").toString())
-                        .setMessageBody(map.get("text").toString());
+                        .setMessageType(MessageType.image)
+                        .setFileUrl(pictureMessage.getUrl())
+                        .setMessageBody(pictureMessage.getText());
+                }
+              
                 break;
                 
             case "file":
-               
-               message .setIsBot(true)
-                       .setIsFile(true)
-                       .setMessageType(MessageType.document)
-                       .setFileUrl(map.get("media").toString())
-                       .setMessageBody(map.get("file_name").toString());
-                       
+               if(msg instanceof FileMessage){
+                  FileMessage fileMessage = (FileMessage)msg;
+                  message.setIsFile(true)
+                        .setIsBot(true)
+                        .setMessageType(MessageType.document)
+                        .setFileUrl(fileMessage.getUrl())
+                        .setMessageBody(fileMessage.getFilename());
+                }
+              
                break;
             
             case "url":
-              
-                message .setIsBot(true)
+                if(msg instanceof UrlMessage){
+                  UrlMessage urlMessage = (UrlMessage)msg;
+                  message.setIsFile(true)
+                        .setIsBot(true)
                         .setMessageType(MessageType.site)
-                        .setFileUrl(map.get("media").toString());
+                        .setFileUrl(urlMessage.getUrl());
                         
+                }
                 break;
                 
                 
             case "location":
-                HashMap<String,Object> location= (HashMap<String,Object>) map.get("location");
-                String loc = String.format("longitude=%s\nlatitude=%s",
-                                location.get("lon").toString(),location.get("lat").toString());
-                message.setIsBot(true)
-                       .setMessageType(MessageType.map)
-                       .setMessageBody(loc);
-                        
+                 if(msg instanceof LocationMessage){
+                  LocationMessage locationMessage = (LocationMessage)msg;
+                  String loc = String.format("longitude=%s\nlatitude=%s",
+                                locationMessage.getLocation().getLongitude()
+                                ,locationMessage.getLocation().getLatitude());
+                  message.setIsBot(true)
+                        .setMessageType(MessageType.map)
+                        .setMessageBody(loc);
+                }
+                
                 break;
                 
                 
             case "contact":
-                HashMap<String,Object> contact= (HashMap<String,Object>) map.get("location");
-                String con = String.format("name=%s\nphoneNumber=%s",
-                                contact.get("name").toString(),contact.get("phone_number").toString());
-                message.setIsBot(true)
-                       .setMessageType(MessageType.text)
-                       .setMessageBody(con);
+                if(msg instanceof ContactMessage){
+                  ContactMessage contactMessage = (ContactMessage)msg;
+                  message.setIsBot(true)
+                          .setMessageBody("Name: "+contactMessage.getContact().getName()+
+                                          "\nPhone_number: "+contactMessage.getContact().getPhoneNumber());
+                        
+                }
+
                 break;
             
             case "sticker":
-                
-                message.setIsBot(true)
-                       .setMessageType(MessageType.text)
-                       .setMessageBody(map.get("sticker_id")+"");
+                if(msg instanceof StickerMessage){
+                  StickerMessage stickerMessage = (StickerMessage)msg;
+                  message.setIsBot(true)
+                          .setMessageBody(stickerMessage.toString());
+                        
+                }
+
                 break;
         }
                 
