@@ -56,7 +56,7 @@ public class MessageMapper {
 //                break;
             
             case "video":
-                VideoMessage vidMsg= (VideoMessage)msg;
+                
                 message.setIsFile(true)
                         .setIsBot(true)
                         .setMessageType(MessageType.video)
@@ -65,7 +65,7 @@ public class MessageMapper {
                 break;
                 
             case "picture":
-                PictureMessage picMsg= (PictureMessage)msg;
+                
                 message.setIsFile(true)
                         .setIsBot(true)
                         .setMessageType(MessageType.document)
@@ -74,7 +74,7 @@ public class MessageMapper {
                 break;
                 
             case "file":
-               FileMessage fileMsg= (FileMessage)msg;
+               
                message .setIsBot(true)
                        .setIsFile(true)
                        .setMessageType(MessageType.document)
@@ -84,7 +84,7 @@ public class MessageMapper {
                break;
             
             case "url":
-                UrlMessage urlMsg= (UrlMessage)msg;
+              
                 message .setIsBot(true)
                         .setMessageType(MessageType.site)
                         .setFileUrl(map.get("media").toString());

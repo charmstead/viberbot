@@ -4,6 +4,7 @@ package com.viberbot.viberbot.EventListener;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.Futures;
+
 import com.viber.bot.api.ViberBot;
 import com.viber.bot.message.TextMessage;
 import com.viberbot.viberbot.messageMapper.MessageMapper;
